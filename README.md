@@ -2,42 +2,7 @@
 Basic survey web application using go and tailwind.
 
 # Project Structure
-survey-app/
-│
-├── cmd/
-│   └── server/          # Entry point for the application
-│       └── main.go
-│
-├── api/
-│   ├── routes/          # Route definitions mapping to controller logic
-│   ├── controllers/     # Business logic for each route (handling user actions, serving data, etc.)
-│   └── middleware/      # Utility logic (authentication, logging, etc.)
-│
-├── models/              # GORM database models
-│
-├── db/                  
-│   ├── migrations/      # Database migration scripts
-│   └── db.go            # Database connection and initialization
-│
-├── static/              # Static assets
-│   ├── css/             # TailwindCSS and other styles
-│   ├── js/              # JavaScript files
-│   └── images/          # Images, if any
-│
-├── templates/           # HTML templates
-│
-├── utils/               # Interface for shared utilities, exposing middleware functions
-│   └── utils.go         # Exposes middleware functions via a Middleware global variable
-│
-├── vendor/              # Go dependencies (if you're vendoring)
-│
-├── go.mod               # Go module file
-├── go.sum               # Go module checksums
-│
-├── .gitignore           # Ignore file for Git
-├── README.md            # Project documentation
-│
-└── Dockerfile           # Optional: For containerization
+![image](https://github.com/DJohnson2021/go-survey-app/assets/81720926/fcc12ada-32c9-49cd-baef-26cbe2d448ff)
 
 Further Context:
 
