@@ -1,30 +1,30 @@
 package routes
 
 import (
-	"github.com/DJohnson2021/go-survey-app/api/controllers"
-	"github.com/gorilla/mux"
+    "github.com/gofiber/fiber/v2"
+    "github.com/DJohnson2021/go-survey-app/api/controllers"
 )
 
-var RegisterRoutes = func(r *mux.Router) {
+var RegisteredRoutes = func(app *fiber.App) {
 
-	// User Routes
-	r.HandleFunc("/api/user/register", controllers.RegisterUserForm).Methods("GET") // Render registration form
-	r.HandleFunc("/api/user/register", controllers.RegisterUser).Methods("POST")    // Handle registration submission
-	r.HandleFunc("/api/user/signin", controllers.SignInUserForm).Methods("GET")     // Render sign-in form
-	r.HandleFunc("/api/user/signin", controllers.SignInUser).Methods("POST")        // Handle sign-in submission
-	r.HandleFunc("/api/user/signout", controllers.SignOutUser).Methods("GET")
-	r.HandleFunc("/api/user/profile", controllers.ViewUserProfile).Methods("GET")
-	r.HandleFunc("/api/user/survey/results", controllers.ViewUserSurveyResults).Methods("GET")
+    // User Routes
+    app.Get("/api/user/register", controllers.RegisterUserForm)   // Render registration form
+    app.Post("/api/user/register", controllers.RegisterUser)      // Handle registration submission
+    app.Get("/api/user/signin", controllers.SignInUserForm)       // Render sign-in form
+    app.Post("/api/user/signin", controllers.SignInUser)          // Handle sign-in submission
+    app.Get("/api/user/signout", controllers.SignOutUser)
+    app.Get("/api/user/profile", controllers.ViewUserProfile)
+    app.Get("/api/user/survey/results", controllers.ViewUserSurveyResults)
 
-	// Admin Routes
-	r.HandleFunc("/api/admin/signin", controllers.SignInAdminForm).Methods("GET") // Render admin sign-in form
-	r.HandleFunc("/api/admin/signin", controllers.SignInAdmin).Methods("POST")    // Handle admin sign-in submission
-	r.HandleFunc("/api/admin/signout", controllers.SignOutAdmin).Methods("GET")
-	r.HandleFunc("/api/admin/dashboard", controllers.ViewAdminDashboard).Methods("GET")
-	r.HandleFunc("/api/admin/survey/edit", controllers.EditSurvey).Methods("POST") // Assuming editing means updating/creating.
+    // Admin Routes
+    app.Get("/api/admin/signin", controllers.SignInAdminForm)     // Render admin sign-in form
+    app.Post("/api/admin/signin", controllers.SignInAdmin)        // Handle admin sign-in submission
+    app.Get("/api/admin/signout", controllers.SignOutAdmin)
+    app.Get("/api/admin/dashboard", controllers.ViewAdminDashboard)
+    app.Post("/api/admin/survey/edit", controllers.EditSurvey)    // Assuming editing means updating/creating.
 
-	// Survey Routes
-	r.HandleFunc("/api/survey", controllers.ListSurveys).Methods("GET")
-	r.HandleFunc("/api/survey/view", controllers.ViewSurvey).Methods("GET")
-	r.HandleFunc("/api/survey/submit", controllers.SubmitSurvey).Methods("POST")
+    // Survey Routes
+    app.Get("/api/survey", controllers.ListSurveys)
+    app.Get("/api/survey/view", controllers.ViewSurvey)
+    app.Post("/api/survey/submit", controllers.SubmitSurvey)
 }
