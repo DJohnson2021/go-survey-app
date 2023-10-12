@@ -1,7 +1,11 @@
 package main
 
-import "fmt"
+import( 
+	"github.com/DJohnson2021/go-survey-app/db"
+)
+
 
 func main() {
-	fmt.Println("hello world")
+	db.InitDatabase()
+	db.CloseDatabase()
 }
