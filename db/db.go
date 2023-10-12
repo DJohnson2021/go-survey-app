@@ -7,7 +7,7 @@ import (
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"github.com/joho/godotenv"
+	// "github.com/joho/godotenv"
 )
 
 var DB *gorm.DB
@@ -23,10 +23,11 @@ func InitDatabase() {
 }
 
 func GetDBConfig() string {
-
+	/*
 	if err := godotenv.Load("../../.env"); err != nil {
 		log.Fatal("Error loading .env file")
 	}
+	*/
 	
     user := os.Getenv("DB_USER")
     password := os.Getenv("DB_PASSWORD")

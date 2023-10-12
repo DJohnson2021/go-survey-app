@@ -2,12 +2,13 @@ package middleware
 
 import (
 	"context"
-	"log"
-	"os"
-	"encoding/base64"
 	"crypto/rand"
+	"encoding/base64"
 	"fmt"
 	"io"
+	"log"
+	"net/http"
+	"os"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -15,6 +16,7 @@ import (
 	"github.com/joho/godotenv"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
+	"github.com/DJohnson2021/go-survey-app/db"
 )
 
 
@@ -38,10 +40,68 @@ var oauthConfig = &oauth2.Config{
 const oauthGoogleUrlAPI = "https://www.googleapis.com/oauth2/v2/userinfo?access_token="
 
 func oauthGoogleLogin(c *fiber.Ctx) error {
-	LoadEnv()
 	oauthState := generateStateOauthCookies(c)
 	u := oauthConfig.AuthCodeURL(oauthState)
 	return c.Redirect(u)
+}
+
+func oauthGoogleCallBack(c *fiber.Ctx) error {
+	oauthState := c.Cookies("oauthstate")
+
+	if c.Query("state") != oauthState {
+		log.Println("invalid oauth google state")
+		return c.Redirect("/")
+	}
+
+	data, err := getUserDataFromGoogle(c.Query("code"))
+	if err != nil {
+		log.Println(err.Error())
+		return c.Redirect("/")
+	}
+	
+	// GetOrCreate User in your db.
+	// Redirect or response with a token.
+	// More code .....
+
+	return c.SendString(fmt.Sprintf("UserInfo: %s\n", data))
+}
+
+func generateStateOauthCookies(c *fiber.Ctx) string {
+	var expiration = time.Now().Add(20 * time.Minute)
+
+	b := make([]byte, 16)
+	rand.Read(b)
+	state := base64.URLEncoding.EncodeToString(b)
+	fiberCookie := &fiber.Cookie{
+		Name: "oauthstate",
+		Value: state,
+		Expires: expiration,
+	}
+
+	c.Cookie(fiberCookie)
+
+	return state
+}
+
+
+func getUserDataFromGoogle(code string) ([]byte, error) {
+	token, err := oauthConfig.Exchange(context.Background(), code)
+	if err != nil {
+		return nil, fmt.Errorf("could not exchange authorization code into token: %s", err.Error())
+	}
+
+	response, err := http.Get(oauthGoogleUrlAPI + token.AccessToken)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get user info %s", err.Error())
+	}
+
+	defer response.Body.Close()
+	contents, err := io.ReadAll(response.Body)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read response: %s", err.Error())
+	}
+
+	return contents, nil
 }
 
 
