@@ -4,48 +4,52 @@ import (
 	"context"
 	"crypto/rand"
 	"encoding/base64"
+	"encoding/json"
 	"fmt"
 	"io"
 	"log"
 	"net/http"
 	"os"
 	"time"
+	"strconv"
 
-	"github.com/dgrijalva/jwt-go"
 	"github.com/gofiber/fiber/v2"
-	"github.com/joho/godotenv"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
-	"github.com/DJohnson2021/go-survey-app/db"
+	"github.com/DJohnson2021/go-survey-app/models"
 )
 
-
+/*
 func LoadEnv() {
 	// Load .env file
 	if err := godotenv.Load("../../../.env"); err != nil {
 		log.Fatalf("Error loading .env file: %v", err)
 	}
 }
+*/
 
 
-var oauthConfig = &oauth2.Config{
-	RedirectURL:  "http://localhost:8000/api/survey", // Change this to your application's callback URL
-	ClientID:     os.Getenv("GOOGLE_CLIENT_ID"),
-	ClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),
-	// Use the actual links for the string slice instead of only the keywords
-	Scopes:       []string{"https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/userinfo.name"},
-	Endpoint:     google.Endpoint,
+var OauthConfig *oauth2.Config
+
+func InitOauthConfig() {
+	OauthConfig = &oauth2.Config{
+		RedirectURL:  "http://localhost:8000/api/user/oauth2/google/callback",
+		ClientID:     os.Getenv("GOOGLE_CLIENT_ID"),
+		ClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),
+		Scopes:       []string{"https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/userinfo.profile"},
+		Endpoint:     google.Endpoint,
+	}
 }
 
 const oauthGoogleUrlAPI = "https://www.googleapis.com/oauth2/v2/userinfo?access_token="
 
-func oauthGoogleLogin(c *fiber.Ctx) error {
+func OauthGoogleLogin(c *fiber.Ctx) error {
 	oauthState := generateStateOauthCookies(c)
-	u := oauthConfig.AuthCodeURL(oauthState)
+	u := OauthConfig.AuthCodeURL(oauthState)
 	return c.Redirect(u)
 }
 
-func oauthGoogleCallBack(c *fiber.Ctx) error {
+func OauthGoogleCallBack(c *fiber.Ctx) error {
 	oauthState := c.Cookies("oauthstate")
 
 	if c.Query("state") != oauthState {
@@ -58,12 +62,64 @@ func oauthGoogleCallBack(c *fiber.Ctx) error {
 		log.Println(err.Error())
 		return c.Redirect("/")
 	}
-	
+
 	// GetOrCreate User in your db.
+	 // Parse the user data
+	 var googleUser struct {
+        ID       string `json:"id"`
+        Name 	 string `json:"name"`
+        Email    string `json:"email"`
+        // ... any other fields you want to capture
+    }
+
+	if err := json.Unmarshal(data, &googleUser); err != nil {
+		log.Println("Error unmarshaling user data:", err)
+		return c.Redirect("/")
+	}
+
+	user, err := models.GetUserByID(googleUser.ID)
+	if err != nil {
+		log.Println("Database error, Error getting user by ID:", err)
+		return c.Redirect("/")
+	}
+
+	if user != nil {
+		// Generate a JWT token for registered user
+		// token, err := middleware.GenerateJWT(/* user data, if needed */)
+		return c.Redirect("/api/user/profile")
+	}
+
+
+	if user == nil {
+		google_ID, err := strconv.ParseInt(googleUser.ID, 10, 64)
+		if err != nil {
+			log.Println("Error converting googleUser.ID to int64:", err)
+			return c.Redirect("/")
+		}
+
+		// Create user
+		newUser := &models.User{
+			GoogleID: google_ID,
+			Username: googleUser.Name,
+			Email:    googleUser.Email,
+			Timestamp: time.Now(),
+		}
+		if err := models.CreateUser(newUser); err != nil {
+			log.Println("Database error, Failed to create user:", err)
+			return c.Redirect("/")
+		}
+
+		// Generate a JWT token for the newly registered user
+		// token, err := middleware.GenerateJWT(/* user data, if needed */)
+	}
+
 	// Redirect or response with a token.
+	return c.Redirect("/api/user/profile")
+
+
 	// More code .....
 
-	return c.SendString(fmt.Sprintf("UserInfo: %s\n", data))
+	// return c.SendString(fmt.Sprintf("UserInfo: %s\n", data))
 }
 
 func generateStateOauthCookies(c *fiber.Ctx) string {
@@ -73,9 +129,10 @@ func generateStateOauthCookies(c *fiber.Ctx) string {
 	rand.Read(b)
 	state := base64.URLEncoding.EncodeToString(b)
 	fiberCookie := &fiber.Cookie{
-		Name: "oauthstate",
-		Value: state,
+		Name:    "oauthstate",
+		Value:   state,
 		Expires: expiration,
+		HTTPOnly: true,
 	}
 
 	c.Cookie(fiberCookie)
@@ -83,9 +140,8 @@ func generateStateOauthCookies(c *fiber.Ctx) string {
 	return state
 }
 
-
 func getUserDataFromGoogle(code string) ([]byte, error) {
-	token, err := oauthConfig.Exchange(context.Background(), code)
+	token, err := OauthConfig.Exchange(context.Background(), code)
 	if err != nil {
 		return nil, fmt.Errorf("could not exchange authorization code into token: %s", err.Error())
 	}
@@ -103,13 +159,3 @@ func getUserDataFromGoogle(code string) ([]byte, error) {
 
 	return contents, nil
 }
-
-
-
-
-
-
-
-
-
-
