@@ -1,10 +1,10 @@
 package main
 
 import (
-	// "github.com/DJohnson2021/go-survey-app/db"
+	"github.com/DJohnson2021/go-survey-app/db"
 	"log"
-	// "os"
-	// "fmt"
+	//"os"
+	//"fmt"
 
 	"github.com/DJohnson2021/go-survey-app/utils"
 	"github.com/gofiber/fiber/v2"
@@ -15,6 +15,7 @@ import (
 func main() {
 	utils.LoadEnv()
 	middleware.InitOauthConfig()
+	db.InitDatabase()
 
 	/*
 	client_ID := os.Getenv("GOOGLE_CLIENT_ID")
@@ -25,7 +26,7 @@ func main() {
 	fmt.Println("OauthConfig.client_secret: ", middleware.OauthConfig.ClientSecret)
 	*/
 
-
+	
 	app := fiber.New()
 
 	// Home Route
@@ -37,6 +38,7 @@ func main() {
 	if err := app.Listen(":8000"); err != nil {
 		log.Fatalf("Failed to start the server: %v", err)
 	}
+	
 	
 }
 

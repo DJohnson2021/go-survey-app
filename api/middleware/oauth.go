@@ -6,30 +6,27 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"github.com/DJohnson2021/go-survey-app/models"
+	"github.com/gofiber/fiber/v2"
+	"golang.org/x/oauth2"
+	"golang.org/x/oauth2/google"
 	"io"
 	"log"
 	"net/http"
 	"os"
 	"time"
-	"strconv"
-
-	"github.com/gofiber/fiber/v2"
-	"golang.org/x/oauth2"
-	"golang.org/x/oauth2/google"
-	"github.com/DJohnson2021/go-survey-app/models"
 )
 
-/*
-func LoadEnv() {
-	// Load .env file
-	if err := godotenv.Load("../../../.env"); err != nil {
-		log.Fatalf("Error loading .env file: %v", err)
-	}
-}
-*/
-
-
 var OauthConfig *oauth2.Config
+
+// Parse the user data
+var googleUser struct {
+	ID         string `json:"id"`
+	Name       string `json:"name"`
+	GivenName  string `json:"given_name"`
+	FamilyName string `json:"family_name"`
+	Email      string `json:"email"`
+}
 
 func InitOauthConfig() {
 	OauthConfig = &oauth2.Config{
@@ -63,15 +60,6 @@ func OauthGoogleCallBack(c *fiber.Ctx) error {
 		return c.Redirect("/")
 	}
 
-	// GetOrCreate User in your db.
-	 // Parse the user data
-	 var googleUser struct {
-        ID       string `json:"id"`
-        Name 	 string `json:"name"`
-        Email    string `json:"email"`
-        // ... any other fields you want to capture
-    }
-
 	if err := json.Unmarshal(data, &googleUser); err != nil {
 		log.Println("Error unmarshaling user data:", err)
 		return c.Redirect("/")
@@ -83,43 +71,34 @@ func OauthGoogleCallBack(c *fiber.Ctx) error {
 		return c.Redirect("/")
 	}
 
-	if user != nil {
-		// Generate a JWT token for registered user
-		// token, err := middleware.GenerateJWT(/* user data, if needed */)
-		return c.Redirect("/api/user/profile")
-	}
-
-
 	if user == nil {
-		google_ID, err := strconv.ParseInt(googleUser.ID, 10, 64)
-		if err != nil {
-			log.Println("Error converting googleUser.ID to int64:", err)
-			return c.Redirect("/")
-		}
-
 		// Create user
 		newUser := &models.User{
-			GoogleID: google_ID,
-			Username: googleUser.Name,
-			Email:    googleUser.Email,
-			Timestamp: time.Now(),
+			GoogleID:   googleUser.ID,
+			Username:   googleUser.Name,
+			GivenName:  googleUser.GivenName,
+			FamilyName: googleUser.FamilyName,
+			Email:      googleUser.Email,
+			Created_At: time.Now(),
 		}
 		if err := models.CreateUser(newUser); err != nil {
 			log.Println("Database error, Failed to create user:", err)
 			return c.Redirect("/")
 		}
 
-		// Generate a JWT token for the newly registered user
-		// token, err := middleware.GenerateJWT(/* user data, if needed */)
+		user = newUser
 	}
 
+	// Generate a JWT token for the newly registered user
+	token, err := generateJWT(user.Username, user.Email)
+	if err != nil {
+		log.Println("Error generating JWT token:", err)
+		return c.Redirect("/")
+	}
+
+	c.Set("Authorization", "Bearer "+token) // Set JWT token in headers
 	// Redirect or response with a token.
 	return c.Redirect("/api/user/profile")
-
-
-	// More code .....
-
-	// return c.SendString(fmt.Sprintf("UserInfo: %s\n", data))
 }
 
 func generateStateOauthCookies(c *fiber.Ctx) string {
@@ -129,9 +108,9 @@ func generateStateOauthCookies(c *fiber.Ctx) string {
 	rand.Read(b)
 	state := base64.URLEncoding.EncodeToString(b)
 	fiberCookie := &fiber.Cookie{
-		Name:    "oauthstate",
-		Value:   state,
-		Expires: expiration,
+		Name:     "oauthstate",
+		Value:    state,
+		Expires:  expiration,
 		HTTPOnly: true,
 	}
 
