@@ -89,16 +89,28 @@ func OauthGoogleCallBack(c *fiber.Ctx) error {
 		user = newUser
 	}
 
+	if user.Username == "" || user.Email == "" {
+		log.Println("Error getting user name and email from database")
+		return c.Redirect("/")
+	}
+
 	// Generate a JWT token for the newly registered user
-	token, err := generateJWT(user.Username, user.Email)
+	token, err := GenerateJWT(user.Username, user.Email)
 	if err != nil {
 		log.Println("Error generating JWT token:", err)
 		return c.Redirect("/")
 	}
 
-	c.Set("Authorization", "Bearer "+token) // Set JWT token in headers
-	// Redirect or response with a token.
-	return c.Redirect("/api/user/profile")
+	// Set Secure flag to true for production
+	c.Cookie(&fiber.Cookie{
+		Name:     "jwt",
+		Value:    token,
+		HTTPOnly: true,
+		SameSite: "Lax",
+		Expires:  time.Now().Add(24 * time.Hour), // e.g., expires in 24 hours
+	})	
+
+	return c.Redirect("/api/user/dashboard")
 }
 
 func generateStateOauthCookies(c *fiber.Ctx) string {

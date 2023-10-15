@@ -1,18 +1,14 @@
 package middleware
 
 import (
-	//"context"
-	"log"
-	"strings"
-
 	"github.com/gofiber/fiber/v2"
-	//"github.com/golang-jwt/jwt"
+	"log"
 )
 
 func IsAdminAuthorized() fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		// Extract token from the Authorization header
-		tokenString := c.Get("Authorization")
+		tokenString := c.Cookies("jwt")
 		if tokenString == "" {
 			log.Println("Error authorizing admin: empty token string")
 			c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
@@ -20,9 +16,6 @@ func IsAdminAuthorized() fiber.Handler {
 			})
 			return c.Redirect("/")
 		}
-
-		// Remove 'Bearer ' prefix from tokenString
-		tokenString = strings.TrimPrefix(tokenString, "Bearer ")
 
 		// Use the adminAuthorized function to verify the token
 		claims, err := adminAuthorized(tokenString)
@@ -35,7 +28,7 @@ func IsAdminAuthorized() fiber.Handler {
 		}
 
 		// You can also add further checks here if needed
-		if !claims.isAdmin {
+		if !claims.IsAdmin {
 			log.Println("Error authorizing user: ", err)
 			c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 				"message": "You are not authorized to access this resource",
@@ -49,7 +42,7 @@ func IsAdminAuthorized() fiber.Handler {
 func IsUserAuthorized() fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		// Extract token from the Authorization header
-		tokenString := c.Get("Authorization")
+		tokenString := c.Cookies("jwt")
 		if tokenString == "" {
 			log.Println("Error authorizing user: empty token string")
 			c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
@@ -57,9 +50,6 @@ func IsUserAuthorized() fiber.Handler {
 			})
 			return c.Redirect("/")
 		}
-
-		// Remove 'Bearer ' prefix from tokenString if it exists
-		tokenString = strings.TrimPrefix(tokenString, "Bearer ")
 
 		// Use the userAuthorized function to verify the token
 		_, err := userAuthorized(tokenString)
@@ -71,7 +61,8 @@ func IsUserAuthorized() fiber.Handler {
 			return c.Redirect("/")
 		}
 
-		// Checking claims.isAdmin is not necessary here because and admin can access all user routes
+		// Checking claims.isAdmin is not necessary here
+		// because and admin can access all user routes
 
 		return c.Next()
 	}

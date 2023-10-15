@@ -1,14 +1,16 @@
 package main
 
 import (
-	"github.com/DJohnson2021/go-survey-app/db"
-	"log"
-	//"os"
 	//"fmt"
+	"log"
 
+	"github.com/DJohnson2021/go-survey-app/db"
+
+	//"os"
+
+	"github.com/DJohnson2021/go-survey-app/api/middleware"
 	"github.com/DJohnson2021/go-survey-app/utils"
 	"github.com/gofiber/fiber/v2"
-	"github.com/DJohnson2021/go-survey-app/api/middleware"
 )
 
 
@@ -16,14 +18,17 @@ func main() {
 	utils.LoadEnv()
 	middleware.InitOauthConfig()
 	db.InitDatabase()
-
+	defer db.CloseDatabase()
 	/*
-	client_ID := os.Getenv("GOOGLE_CLIENT_ID")
-	client_Secret := os.Getenv("GOOGLE_CLIENT_SECRET")
-	fmt.Println("Client_ID: ", client_ID)
-	fmt.Println("OauthConfig.ClientID: ", middleware.OauthConfig.ClientID)
-	fmt.Println("Client_Secret: ", client_Secret)
-	fmt.Println("OauthConfig.client_secret: ", middleware.OauthConfig.ClientSecret)
+	adminNames, adminEmail, err := utils.GetAdminNamesAndEmails()
+	if err != nil {
+		fmt.Printf("Error getting admin names and emails: %v", err)
+	}
+
+	for i, name := range adminNames {
+		fmt.Printf("Admin name: %v\n", name)
+		fmt.Printf("Admin email: %v\n", adminEmail[i])
+	}
 	*/
 
 	
@@ -34,11 +39,49 @@ func main() {
 	// OAuth Routes
 	app.Get("/api/user/oauth2/google/login", middleware.OauthGoogleLogin)
 	app.Get("/api/user/oauth2/google/callback", middleware.OauthGoogleCallBack)
+	
+	// Test routes
+	app.Get("/api/user/dashboard", middleware.IsUserAuthorized(), func(c *fiber.Ctx) error {	
+		c.Type("html")
+		html := `
+		<!DOCTYPE html>
+		<html lang="en">
+		<head>
+			<meta charset="UTF-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<title>Admin Check</title>
+		</head>
+		<body>
+			<h2>Hello user!</h2>
+			<p>Are you an admin?</p>
+			<form action="/api/admin/dashboard" method="GET">
+				<button type="submit">I am admin</button>
+			</form>
+		</body>
+		</html>
+		`
+		return c.SendString(html)
+	})	
+
+	app.Get("/api/admin/dashboard",middleware.IsAdminAuthorized(), func(c *fiber.Ctx) error {
+		return c.SendString("Hello, admin!")
+	})
 
 	if err := app.Listen(":8000"); err != nil {
 		log.Fatalf("Failed to start the server: %v", err)
 	}
 	
+
+	/*
+	testName := "Devin Johnson"
+	testEmail := "devinjohnson578@gmail.com"
+
+	jwtToken, err := middleware.GenerateJWT(testName, testEmail)
+	if err != nil {
+		fmt.Printf("Error generating JWT: %v", err)
+	}
+	fmt.Println(jwtToken)
+	*/
 	
 }
 
@@ -62,3 +105,4 @@ func HomePage(c *fiber.Ctx) error {
 	`
 	return c.SendString(htmlContent)
 }
+
