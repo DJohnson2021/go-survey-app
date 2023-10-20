@@ -20,20 +20,21 @@ var RegisteredRoutes = func(app *fiber.App) {
     // app.Post("/api/user/register", controllers.RegisterUser)      // Handle registration submission
     // app.Get("/api/user/signin", controllers.SignInUserForm)       // Render sign-in form
     // app.Post("/api/user/signin", controllers.SignInUser)          // Handle sign-in submission
-    app.Get("/api/user/signout", controllers.SignOutUser)
-    app.Get("/api/user/profile", controllers.ViewUserProfile)
-    app.Get("/api/user/survey/results", controllers.ViewUserSurveyResults)
+    //app.Get("/api/user/signout", controllers.SignOutUser)
+    app.Get("/api/user/dashboard", middleware.IsUserAuthorized(), controllers.ViewUserDashboard)
+    app.Get("/api/user/profile", middleware.IsUserAuthorized(), controllers.ViewUserProfile)
+    app.Get("/api/user/survey/results", middleware.IsUserAuthorized(), controllers.ViewUserSurveyResults)
 
     // Admin Routes
-    app.Get("/api/admin/signin", controllers.SignInAdminForm)     // Render admin sign-in form
-    app.Post("/api/admin/signin", controllers.SignInAdmin)        // Handle admin sign-in submission
-    app.Get("/api/admin/signout", controllers.SignOutAdmin)
-    app.Get("/api/admin/dashboard", controllers.ViewAdminDashboard)
-    app.Post("/api/admin/survey/edit", controllers.EditSurvey)    // Assuming editing means updating/creating.
+    //app.Get("/api/admin/signin", controllers.SignInAdminForm)     // Render admin sign-in form
+    //app.Post("/api/admin/signin", controllers.SignInAdmin)        // Handle admin sign-in submission
+    //app.Get("/api/admin/signout", controllers.SignOutAdmin)
+    app.Get("/api/admin/dashboard", middleware.IsAdminAuthorized(), controllers.ViewAdminDashboard)
+    app.Post("/api/admin/survey/edit", middleware.IsAdminAuthorized(), controllers.EditSurvey)    // Assuming editing means updating/creating.
 
     // Survey Routes
-    app.Get("/api/survey", controllers.ListSurveys)
-    app.Get("/api/survey/view", controllers.ViewSurvey)
-    app.Post("/api/survey/submit", controllers.SubmitSurvey)
-    app.Get("/api/survey/retake", controllers.RetakeSurvey)
+    app.Get("/api/survey", middleware.IsUserAuthorized(), controllers.ListSurveys)
+    app.Get("/api/survey/view", middleware.IsUserAuthorized(), controllers.ViewSurvey)
+    app.Post("/api/survey/submit", middleware.IsUserAuthorized(), controllers.SubmitSurvey)
+    app.Get("/api/survey/retake", middleware.IsUserAuthorized(), controllers.RetakeSurvey)
 }

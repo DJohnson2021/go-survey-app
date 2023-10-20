@@ -9,13 +9,15 @@ cloud.google.com/go/compute/metadata
 github.com/andybalholm/brotli
 # github.com/dgrijalva/jwt-go v3.2.0+incompatible
 ## explicit
-github.com/dgrijalva/jwt-go
 # github.com/gofiber/fiber/v2 v2.49.2
 ## explicit; go 1.20
 github.com/gofiber/fiber/v2
 github.com/gofiber/fiber/v2/internal/schema
 github.com/gofiber/fiber/v2/log
 github.com/gofiber/fiber/v2/utils
+# github.com/golang-jwt/jwt v3.2.2+incompatible
+## explicit
+github.com/golang-jwt/jwt
 # github.com/golang/protobuf v1.5.3
 ## explicit; go 1.9
 github.com/golang/protobuf/proto

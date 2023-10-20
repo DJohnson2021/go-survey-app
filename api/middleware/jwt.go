@@ -1,26 +1,40 @@
 package middleware
 
 import (
+	"log"
 	"time"
-	"github.com/dgrijalva/jwt-go"
+	"github.com/DJohnson2021/go-survey-app/utils"
+	"github.com/golang-jwt/jwt"
 )
 
-func GenerateJWT(/* user data, if needed */) (string, error) {
-	// Set up JWT claims (these can include user data if needed)
-	claims := jwt.MapClaims{
-		"iss": "Go-Survey-App",
-		"exp": time.Now().Add(time.Hour * 72).Unix(),  // Set expiration time, for example, 72 hours from now
-		// ... add other claims as needed
+type Claims struct {
+	Name    string `json:"name"`
+	Email   string `json:"email"`
+	IsAdmin bool   `json:"isAdmin"`
+	jwt.StandardClaims
+}
+
+func GenerateJWT(name, email string) (string, error) {
+	expirationTime := time.Now().Add(20 * time.Minute)
+	claims := &Claims{
+		Name:    name,
+		Email:   email,
+		IsAdmin: false,
+		StandardClaims: jwt.StandardClaims{
+			ExpiresAt: expirationTime.Unix(),
+		},
 	}
 
-	// Create a new JWT token
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-
-	// Sign the token with a secret key
-	signedToken, err := token.SignedString([]byte("your_secret_key"))
+	jwtKey, err := utils.GetJWTSecret()
 	if err != nil {
-		return "", err
+		log.Fatalf("Error getting jwt secret: %v", err)
 	}
 
-	return signedToken, nil
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	signed_token, err := token.SignedString(jwtKey)
+	if err != nil {
+		log.Fatalf("error signing token: %v", err)
+	}
+
+	return signed_token, nil
 }
