@@ -1,0 +1,161 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+}
+*,
+*:before,
+*:after{
+    box-sizing: border-box;
+}
+.container{
+    height: 100vh;
+}
+
+.g-sign-in-button{
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 10px;
+    display: inline-block;
+    width: 240px;
+    height: 50;
+    background-color: blue;
+    color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px 0 black;
+    transition: background-color .218s, border-color .218s, box-shadow;
+
+}
+
+.g-sign-in-button:hover{
+    background-color: blue;
+    transition: background-color .2s;
+}
+
+.g-sign-in-button:active{
+background-color: blue;
+transition: background-color .2s;
+}
+
+.g-sign-in-button .content-wrapper{
+    height: 100%;
+    width: 100%;
+    border: 1px solid transparent;
+
+}
+
+.g-sign-in-button img{
+    width: 10px;
+    height: 18px;
+}
+
+.g-sign-in-button .logo-wrapper{
+    padding: 15px;
+    background: white;
+    width: 48px;
+    height: 100%;
+    border-radius: 5px;
+    display: inline-block;
+
+}
+
+.g-sign-in-button .text-container {
+    font-family: "roboto", Arial, sans-serif;
+    font-weight: 500;
+    letter-spacing: .21px;
+    font-size: 16px;
+    line-height: 48px;
+    vertical-align: top;
+    border: none;
+    display: inline-block;
+    text-align: center;
+    width: 180px
+}
+
+html { 
+    background: url('https://4kwallpapers.com/images/walls/thumbs_3t/1034.jpg') no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    background-position: center;
+  }
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'Oswald', sans-serif;
+
+}
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px 100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 99;
+
+
+}
+.logo{
+    font-size: 2em;
+    color: white;
+    user-select: none;
+
+}
+
+.navigation a{
+    position: relative;
+    font-size: 1.1em;
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    margin-left: 40px;
+}
+.navigation a::after {
+    content:'';
+    position: absolute;
+    left:0;
+    bottom: -6px;
+    width: 100%;
+    height: 3px;
+    background: white;
+    border-radius: 5px;
+    transform-origin: right;
+    transform: scaleX(0);
+    transition: transform .5s;
+}
+
+.navigation a:hover::after{
+    transform-origin: left;
+    transform: scaleX(1);
+
+}
+
+
+
+.wrapper{
+    width: 450px;
+    background: transparent;
+    border: 2px solid grey;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 0 10px black;
+    color: white;
+    border-radius: 10px;
+    padding: 30px 40px;
+    
+}
+
+.wrapper h1{
+    font-size: 36px;
+    text-align: center;
+}
+
