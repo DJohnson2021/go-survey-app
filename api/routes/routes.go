@@ -12,6 +12,7 @@ var RegisteredRoutes = func(app *fiber.App) {
     app.Get("/", controllers.HomePage)
 
     // OAuth Routes
+    app.Get("/login", controllers.LoginPage)
     app.Get("/api/user/oauth2/google/login", middleware.OauthGoogleLogin)
     app.Get("/api/user/oauth2/google/callback", middleware.OauthGoogleCallBack)
 
