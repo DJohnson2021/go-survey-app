@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/DJohnson2021/go-survey-app/db"
+	"github.com/DJohnson2021/go-survey-app/api/controllers"
 
 	//"os"
 
@@ -35,8 +36,12 @@ func main() {
 	app := fiber.New()
 
 	// Home Route
-	app.Get("/", HomePage)
+	app.Static("/", "../../templates/")
+	app.Static("/static", "../../static")
+	app.Get("/", controllers.HomePage)
 	// OAuth Routes
+	// app.Static("/login", "../../templates/Login.html")
+	app.Get("/login", controllers.LoginPage)
 	app.Get("/api/user/oauth2/google/login", middleware.OauthGoogleLogin)
 	app.Get("/api/user/oauth2/google/callback", middleware.OauthGoogleCallBack)
 	
