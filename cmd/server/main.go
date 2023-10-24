@@ -20,23 +20,12 @@ func main() {
 	middleware.InitOauthConfig()
 	db.InitDatabase()
 	defer db.CloseDatabase()
-	/*
-	adminNames, adminEmail, err := utils.GetAdminNamesAndEmails()
-	if err != nil {
-		fmt.Printf("Error getting admin names and emails: %v", err)
-	}
 
-	for i, name := range adminNames {
-		fmt.Printf("Admin name: %v\n", name)
-		fmt.Printf("Admin email: %v\n", adminEmail[i])
-	}
-	*/
-
-	
 	app := fiber.New()
 
 	// Home Route
 	app.Static("/", "../../templates/")
+	app.Static("/login", "../../templates/")
 	app.Static("/static", "../../static")
 	app.Get("/", controllers.HomePage)
 	// OAuth Routes
@@ -75,18 +64,6 @@ func main() {
 	if err := app.Listen(":8000"); err != nil {
 		log.Fatalf("Failed to start the server: %v", err)
 	}
-	
-
-	/*
-	testName := "Devin Johnson"
-	testEmail := "devinjohnson578@gmail.com"
-
-	jwtToken, err := middleware.GenerateJWT(testName, testEmail)
-	if err != nil {
-		fmt.Printf("Error generating JWT: %v", err)
-	}
-	fmt.Println(jwtToken)
-	*/
 	
 }
 

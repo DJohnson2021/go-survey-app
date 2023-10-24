@@ -8,6 +8,10 @@ import (
 
 var RegisteredRoutes = func(app *fiber.App) {
 
+    // Static Templates
+    app.Static("/", "../../templates/")
+	app.Static("/login", "../../templates/")
+
     // Home Route
     app.Get("/", controllers.HomePage)
 
