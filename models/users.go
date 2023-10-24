@@ -2,6 +2,7 @@ package models
 
 import (
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/DJohnson2021/go-survey-app/db"
@@ -32,9 +33,20 @@ func GetUserByID(google_id string) (*User, error) {
 	result := db.DB.First(&user, "google_id = ?", google_id)
 	if result.Error != nil {
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-			return nil, nil
+			return nil, fmt.Errorf("User record with google_id %v not found", google_id)
 		}
 		return nil, result.Error
 	}
 	return &user, nil
+}
+
+func DeleteUserByID(google_id string) error {
+	result := db.DB.Delete(&User{}, "google_id = ?", google_id)
+	if result.Error != nil {
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			return fmt.Errorf("User record with google_id %v not found", google_id)
+		}
+		return result.Error
+	}
+	return nil
 }
