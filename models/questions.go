@@ -10,7 +10,7 @@ import (
 )
 
 type Question struct {
-	ID            int32     `db:"id" json:"id"`
+	ID            int32     `gorm:"primaryKey" gorm:"autoIncrement" db:"id" json:"id"`
 	Question_text string    `db:"question_text" json:"question_text"`
 	Survey_id     int32     `db:"survey_id" json:"survey_id"`
 	Created_At    time.Time `db:"timestamp" json:"timestamp"`
