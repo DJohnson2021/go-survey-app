@@ -49,3 +49,14 @@ func DeleteUserByID(google_id string) error {
 	}
 	return nil
 }
+
+func ModifyUser(user *User) error {
+	result := db.DB.Save(user)
+	if result.Error != nil {
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			return fmt.Errorf("User record with google_id %v not found", user.GoogleID)
+		}
+		return result.Error
+	}
+	return nil
+}
