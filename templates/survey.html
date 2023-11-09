@@ -9,76 +9,41 @@
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
     </head>
 
-<!-- this is mostly just a template to build the survey on if you want to but you dont have to if you decide not to use this just delete
-the css file and the html or have the dash board link to where ever you want to go-->
-<!-- theres issues with the submit button???? idk why the hover on it is streatching so far and im losing braincells trying to fix the css-->
+
     <body>
-      <div class="container">
-        
-        
-        <section class="main">
-
-          <div class="health">
-            <a href="dashboard.html"><button>Return to dashboard</button></a>
-          </div>
-
-          <div class="main-top">
-            <h1>Survey</h1>
-          </div>
-
-          <div class="health-tab">
-
-<!-- the actual survey goes here i was mostly testing to see if the container grew as information was entered into it-->
-
-          </div>
-          <section class="main-course">
-            <div class="course-box">
-
-              <p> please take the survey to recieve information back about your sleep habits and potential health risk</p>
-              <p> please take the survey to recieve information back about your sleep habits and potential health risk</p>
-              <p> please take the survey to recieve information back about your sleep habits and potential health risk</p>
-              <p> please take the survey to recieve information back about your sleep habits and potential health risk</p>
-              <p> please take the survey to recieve information back about your sleep habits and potential health risk</p>
-              <p> please take the survey to recieve information back about your sleep habits and potential health risk</p>
-              <p> please take the survey to recieve information back about your sleep habits and potential health risk</p>
-              <p> please take the survey to recieve information back about your sleep habits and potential health risk</p>
-              <p> please take the survey to recieve information back about your sleep habits and potential health risk</p>
-              <p> please take the survey to recieve information back about your sleep habits and potential health risk</p>
-              <p> please take the survey to recieve information back about your sleep habits and potential health risk</p>
-              <p> please take the survey to recieve information back about your sleep habits and potential health risk</p>
-              <p> please take the survey to recieve information back about your sleep habits and potential health risk</p>
-              <p> please take the survey to recieve information back about your sleep habits and potential health risk</p>
-              <p> please take the survey to recieve information back about your sleep habits and potential health risk</p>
-              <p> please take the survey to recieve information back about your sleep habits and potential health risk</p>
-              <p> please take the survey to recieve information back about your sleep habits and potential health risk</p>
-              <p> please take the survey to recieve information back about your sleep habits and potential health risk</p>
-              <p> please take the survey to recieve information back about your sleep habits and potential health risk</p>
-              <p> please take the survey to recieve information back about your sleep habits and potential health risk</p>
-              <p> please take the survey to recieve information back about your sleep habits and potential health risk</p>
-              <p> please take the survey to recieve information back about your sleep habits and potential health risk</p>
-              <p> please take the survey to recieve information back about your sleep habits and potential health risk</p>
-              <p> please take the survey to recieve information back about your sleep habits and potential health risk</p>
-              <p> please take the survey to recieve information back about your sleep habits and potential health risk</p>
-              <p> please take the survey to recieve information back about your sleep habits and potential health risk</p>
-              <p> please take the survey to recieve information back about your sleep habits and potential health risk</p>
-              <p> please take the survey to recieve information back about your sleep habits and potential health risk</p>
-              <p> please take the survey to recieve information back about your sleep habits and potential health risk</p>
-              <p> please take the survey to recieve information back about your sleep habits and potential health risk</p>
-              <p> please take the survey to recieve information back about your sleep habits and potential health risk</p>
-              <p> please take the survey to recieve information back about your sleep habits and potential health risk</p>
-              <p> please take the survey to recieve information back about your sleep habits and potential health risk</p>
-              
-              
-              <div class="submit">
-                <a href="#"><button>Submit</button></a>
-              </div>
-
-              </div>
-
-
-            </div>
-          </section>
-        </section>
+      <div class="heading">
+        <h1 id="head"> sleep survey</h1>
       </div>
+<!-- start typing the survey within the <form> rename stuff on css file as needed  content one has its own css rule applied to it and so
+  does the option1 div-->
+      <form>
+        <div id="content1">
+         <lable> 1. which option best describes how much you sleep</lable> <br><br>
+        
+        <div id="option1">
+          <select>
+            <option name="select how many hours you sleep">select number of hours</option>
+            <option value="5">1</option>
+            <option value="6">2</option>
+            <option value="7">3</option>
+            <option value="8">4</option>
+          </select>
+        </div>
+        <br>
+        <lable id="head1">2. would you let a friend take this survey</lable><br><br>
+        <input type="radio" name="radio" class="larger">defintely <br><br>
+        <input type="radio" name="radio" class="larger">maybe <br><br>
+        <input type="radio" name="radio" class="larger">not at all <br><br>
+
+        <button><h3> submit survey</h3></button>
+
+        </div>
+        <br>
+        
+      </form>
+      
+
+
+
     </body>
-    </html></span>
+    </html>

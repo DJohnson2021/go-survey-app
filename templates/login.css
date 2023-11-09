@@ -22,8 +22,8 @@
     display: inline-block;
     width: 240px;
     height: 50;
-    background-color: blue;
-    color: white;
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
     border-radius: 5px;
     box-shadow: 0 2px 4px 0 black;
     transition: background-color .218s, border-color .218s, box-shadow;

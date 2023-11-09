@@ -11,110 +11,51 @@
 }
 body{
   background: #5884ba;
+  color: fff;
+  font-size: 1.1em;
 }
-.container{
-  display: flex;
-}
-
-
-
-
-a{
-  position: relative;
-  color: rgb(255, 255, 255);
-  font-size: 14px;
-  display: table;
-  width: 280px;
-  padding: 10px;
-}
-
-a:hover{
-  background: #13143e;
-}
-
-/* Main Section */
-.main{
-  position: relative;
-  padding: 20px;
-  width: 100%;
-}
-.main-top{
-  display: flex;
-  width: 100%;
-}
-
-.main-top h1{
-  width:100%;
-  display: inline;
-  color: white;
-  font-weight: bold;
+.heading{
   text-align: center;
-  font-size: 2.5em;   
+  width: 100%;
+  margin: auto;
+  margin-top: 100px;
+}
+#head{
+  font-size: 1.8em;
 }
 
-.health-tab{
+#content1{
+  width: 90%;
+  margin: auto;
+}
+form{
+  background-color: rgba(0,0,0,0.7);
+  padding-top: 34px;
   display: flex;
-  margin-top: 20px;
-}
-
-
-
-.health button{
-  background: rgb(63, 118, 152);
-  color: #fff;
-  padding: 14px 28px;
-  border-radius: 10px;
-  margin-top: 15px;
-  cursor: pointer;
-  text-align: right;
-  
-}
-.health button:hover{
-  background: rgba(12, 16, 79, 0.856);
-}
-/* Courses */
-.main-course{
-  margin-top:20px ;
-  text-transform: capitalize;
-}
-.course-box{
-
+  align-items: center;
+  justify-content: center;
+  width: 54%;
+  border-radius: 5px;
+  margin: auto;
   margin-top: 10px;
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+  padding-bottom: 60px;
 }
-.course-box ul{
-  list-style: none;
-  display: flex;
+#option1 select{
+  width: 98.5%;
+  height: 2.7em;
+  position: relative;
+  bottom: 10px;
+  border-radius: 5px;
+  border: 0;
 }
-.course-box ul li{
-  margin: 10px;
-  color: gray;
+button{
+  width: 98.5%;
+  height: 3em;
+  position: relative;
+  top: 11px;
+  background-color: rgb(18,219,78);
+  border: none;
+  color: rgb(255, 255, 2555);
+  margin-bottom: 10px;
   cursor: pointer;
-}
-.course-box ul .active{
-  color: #000;
-  border-bottom: 1px solid #000;
-}
-.course-box .course{
-  display: flex;
-}
-.course-box .submit button{
-  background: rgb(63, 152, 82);
-  color: #fff;
-  padding: 14px 28px;
-  border-radius: 10px;
-  margin-top: 15px;
-  cursor: pointer;
-  display: flex;
-  margin-left: 700px;
-  
-}
-.course-box .submit button:hover{
-  background: rgba(12, 16, 79, 0.856);
-}
-
-.main-course .course-box p{
-  margin-left: 30px;
 }
