@@ -15,3 +15,13 @@ func HomePage(c *fiber.Ctx) error {
 func LoginPage(c *fiber.Ctx) error {
 	return c.SendFile("../../templates/Login.html")
 }
+
+// SurveyPage is the controller for the survey page.
+func SurveyPage(c *fiber.Ctx) error {
+	return c.SendFile("../../templates/survey.html")
+}
+
+// ResultPage is the controller for the survey results page.
+func ResultPage(c *fiber.Ctx) error {
+	return c.SendFile("../../templates/results.html")
+}

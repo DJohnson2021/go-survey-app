@@ -1,0 +1,54 @@
+
+<span style="font-family: verdana, geneva, sans-serif;"><!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <title>survey</title>
+      <link rel="stylesheet" href="../static/styles/survey.css" />
+
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+    </head>
+
+
+    <body>
+      <div class="heading">
+        <h1 id="head"> sleep survey</h1>
+      </div>
+<!-- start typing the survey within the <form> rename stuff on css file as needed  content one has its own css rule applied to it and so
+  does the option1 div-->
+      <form>
+        <div id="content1">
+         <lable> 1. which option best describes how much you sleep</lable> <br><br>
+        
+        <div id="option1">
+          <select>
+            <option name="select how many hours you sleep">select number of hours</option>
+            <option value="5">1</option>
+            <option value="6">2</option>
+            <option value="7">3</option>
+            <option value="8">4</option>
+          </select>
+        </div>
+        <br>
+        <lable id="head1">2. would you let a friend take this survey</lable><br><br>
+        <input type="radio" name="radio" class="larger">defintely <br><br>
+        <input type="radio" name="radio" class="larger">maybe <br><br>
+        <input type="radio" name="radio" class="larger">not at all <br><br>
+
+        <a href="/api/user/survey/results">
+          <button>
+              <h3>Submit Survey</h3>
+          </button>
+        </a>
+      
+
+        </div>
+        <br>
+        
+      </form>
+      
+
+
+
+    </body>
+    </html>

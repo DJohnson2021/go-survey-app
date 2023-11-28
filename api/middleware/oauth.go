@@ -110,7 +110,7 @@ func OauthGoogleCallBack(c *fiber.Ctx) error {
 		Expires:  time.Now().Add(24 * time.Hour), // e.g., expires in 24 hours
 	})	
 
-	return c.Redirect("/api/user/dashboard")
+	return c.Redirect("/api/user/survey")
 }
 
 func generateStateOauthCookies(c *fiber.Ctx) string {
