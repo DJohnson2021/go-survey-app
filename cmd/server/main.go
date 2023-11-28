@@ -5,13 +5,14 @@ import (
 	"log"
 
 	"github.com/DJohnson2021/go-survey-app/db"
-	"github.com/DJohnson2021/go-survey-app/api/controllers"
+	//"github.com/DJohnson2021/go-survey-app/api/controllers"
 
 	//"os"
 
 	"github.com/DJohnson2021/go-survey-app/api/middleware"
 	"github.com/DJohnson2021/go-survey-app/utils"
 	"github.com/gofiber/fiber/v2"
+	"github.com/DJohnson2021/go-survey-app/api/routes"
 )
 
 
@@ -22,17 +23,21 @@ func main() {
 	defer db.CloseDatabase()
 
 	app := fiber.New()
+	routes.RegisteredRoutes(app)
 
 	// Home Route
-	app.Static("/", "../../templates/")
-	app.Static("/login", "../../templates/")
-	app.Static("/static", "../../static")
-	app.Get("/", controllers.HomePage)
+	//app.Static("/", "../../templates/")
+	//app.Static("/login", "../../templates/")
+	//app.Static("/static", "../../static")
+
+	//app.Get("/", controllers.HomePage)
+	
+	
 	// OAuth Routes
 	// app.Static("/login", "../../templates/Login.html")
-	app.Get("/login", controllers.LoginPage)
-	app.Get("/api/user/oauth2/google/login", middleware.OauthGoogleLogin)
-	app.Get("/api/user/oauth2/google/callback", middleware.OauthGoogleCallBack)
+	//app.Get("/login", controllers.LoginPage)
+	//app.Get("/api/user/oauth2/google/login", middleware.OauthGoogleLogin)
+	//app.Get("/api/user/oauth2/google/callback", middleware.OauthGoogleCallBack)
 	
 	// Test routes
 	app.Get("/api/user/dashboard", middleware.IsUserAuthorized(), func(c *fiber.Ctx) error {	
