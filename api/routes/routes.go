@@ -14,6 +14,8 @@ var RegisteredRoutes = func(app *fiber.App) {
     app.Static("/api/user/survey", "../../templates")
     app.Static("/api/user/survey/results", "../../templates")
 	app.Static("/static", "../../static")
+    app.Static("/api/static", "../../static")
+    app.Static("/api/user/static", "../../static")
 
     // Home Route
     app.Get("/", controllers.HomePage)
