@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>sleepy Scholars survey</title>
+        <link rel="stylesheet" href="../static/styles/login.css">
+        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <header>
+            <h2 class="logo">Sleepy Scholars</h2>
+            <nav class="navigation"> 
+                <a href="#">Admin Login</a>
+                <a href="https://jsums.instructure.com/login/canvas">Canvas</a>
+                <a href="https://ssb-prod.ec.jsums.edu/PROD/twbkwbis.P_GenMenu?name=homepage">Paws</a>
+                <a href="https://www.jsums.edu/">Jackson State Website</a>
+                <a href="/">Homepage</a>
+            </nav>
+        </header>
+        
+        <div class="wrapper">
+            <h1>Log in with Google</h1>
+            <br><br><br>
+            <!-- Update the href attribute below with the URL endpoint you want to redirect to -->
+            <a href="/api/user/oauth2/google/login">
+                <div class="g-sign-in-button">
+                    <div class="content-wrapper">
+                        <div class="logo-wrapper">
+                            <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google Logo">
+                        </div>
+                        <span class="text-container">
+                            <span> sign in with google</span>
+                        </span>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </body>
+</html>

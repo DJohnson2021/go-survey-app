@@ -5,12 +5,14 @@ import (
 	"log"
 
 	"github.com/DJohnson2021/go-survey-app/db"
+	//"github.com/DJohnson2021/go-survey-app/api/controllers"
 
 	//"os"
 
 	"github.com/DJohnson2021/go-survey-app/api/middleware"
 	"github.com/DJohnson2021/go-survey-app/utils"
 	"github.com/gofiber/fiber/v2"
+	"github.com/DJohnson2021/go-survey-app/api/routes"
 )
 
 
@@ -19,26 +21,23 @@ func main() {
 	middleware.InitOauthConfig()
 	db.InitDatabase()
 	defer db.CloseDatabase()
-	/*
-	adminNames, adminEmail, err := utils.GetAdminNamesAndEmails()
-	if err != nil {
-		fmt.Printf("Error getting admin names and emails: %v", err)
-	}
 
-	for i, name := range adminNames {
-		fmt.Printf("Admin name: %v\n", name)
-		fmt.Printf("Admin email: %v\n", adminEmail[i])
-	}
-	*/
-
-	
 	app := fiber.New()
+	routes.RegisteredRoutes(app)
 
 	// Home Route
-	app.Get("/", HomePage)
+	//app.Static("/", "../../templates/")
+	//app.Static("/login", "../../templates/")
+	//app.Static("/static", "../../static")
+
+	//app.Get("/", controllers.HomePage)
+	
+	
 	// OAuth Routes
-	app.Get("/api/user/oauth2/google/login", middleware.OauthGoogleLogin)
-	app.Get("/api/user/oauth2/google/callback", middleware.OauthGoogleCallBack)
+	// app.Static("/login", "../../templates/Login.html")
+	//app.Get("/login", controllers.LoginPage)
+	//app.Get("/api/user/oauth2/google/login", middleware.OauthGoogleLogin)
+	//app.Get("/api/user/oauth2/google/callback", middleware.OauthGoogleCallBack)
 	
 	// Test routes
 	app.Get("/api/user/dashboard", middleware.IsUserAuthorized(), func(c *fiber.Ctx) error {	
@@ -70,18 +69,6 @@ func main() {
 	if err := app.Listen(":8000"); err != nil {
 		log.Fatalf("Failed to start the server: %v", err)
 	}
-	
-
-	/*
-	testName := "Devin Johnson"
-	testEmail := "devinjohnson578@gmail.com"
-
-	jwtToken, err := middleware.GenerateJWT(testName, testEmail)
-	if err != nil {
-		fmt.Printf("Error generating JWT: %v", err)
-	}
-	fmt.Println(jwtToken)
-	*/
 	
 }
 
