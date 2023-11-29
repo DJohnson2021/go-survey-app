@@ -1,8 +1,15 @@
 package controllers
 
 import (
-	"github.com/gofiber/fiber/v2"
+	"fmt"
+	"github.com/DJohnson2021/go-survey-app/api/middleware"
+	"github.com/DJohnson2021/go-survey-app/db"
 	"github.com/DJohnson2021/go-survey-app/models"
+	"github.com/DJohnson2021/go-survey-app/utils"
+	"github.com/gofiber/fiber/v2"
+	"github.com/golang-jwt/jwt"
+	"time"
+	//"strconv"
 	// "log"
 	// "html/template"
 )
@@ -28,25 +35,69 @@ func ResultPage(c *fiber.Ctx) error {
 }
 
 func SubmitSurvey(c *fiber.Ctx) error {
-    // Assuming you have user authentication and can get the user's ID
-    userID := 
+	// Extract the JWT token from the cookie
+	tokenString := c.Cookies("jwt")
+	if tokenString == "" {
+		return c.Status(fiber.StatusUnauthorized).SendString("Unauthorized")
+	}
 
-    // Parse form values
-    question := "How much do you sleep?" // This can be dynamic based on your form
-    answer := c.FormValue("answer")
+	// Decode the JWT token to get user data
+	claims := &middleware.Claims{}
+	_, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
+		jwtKey, err := utils.GetJWTSecret()
+		if err != nil {
+			return nil, fmt.Errorf("error getting JWT secret: %v", err)
+		}
+		return jwtKey, nil
+	})
 
-    // Create a new survey response
-    response := models.SurveyResponse{
-        UserID:   userID,
-        Question: question,
-        Answer:   answer,
-    }
+	if err != nil {
+		return c.Status(fiber.StatusUnauthorized).SendString("Unauthorized")
+	}
 
-    // Save the response to the database
-    result := db.DB.Create(&response)
-    if result.Error != nil {
-        return c.Status(fiber.StatusInternalServerError).SendString("Error saving response")
-    }
+	// Get user ID from the database based on email
+	user, err := models.GetUserByEmail(claims.Email)
+	if err != nil {
+		// Handle error (e.g., user not found)
+        return fmt.Errorf("error find user with this email: %v", claims.Email)
+	}
+	userID := user.ID
 
-    return c.Redirect("/survey-success")
+	// Parse form values
+	sleepAmount := c.FormValue("sleep_amount")
+	friendSurvey := c.FormValue("friend_survey")
+
+	// Convert questionID to int32
+	/*
+	   questionIDInt, err := strconv.ParseInt(questionID, 10, 32)
+	   if err != nil {
+	       // handle error
+	   }
+	*/
+
+	// Create a new response
+	responseQ1 := models.Response{
+		Question_id:   1,
+		User_id:       userID,
+		Response: sleepAmount,
+		Created_At:    time.Now(),
+	}
+
+	responseQ2 := models.Response{
+		Question_id:   2,
+		User_id:       userID,
+		Response: friendSurvey,
+		Created_At:    time.Now(),
+	}
+
+	// Save the response to the database
+	if err := db.DB.Create(&responseQ1).Error; err != nil {
+		return fmt.Errorf("error creating user response to question 1: %v", err)
+	}
+
+	if err := db.DB.Create(&responseQ2).Error; err != nil {
+		return fmt.Errorf("error creating user response to question 2: %v", err)
+	}
+
+	return c.Redirect("/api/user/survey/results")
 }

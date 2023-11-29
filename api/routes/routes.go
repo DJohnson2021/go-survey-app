@@ -43,6 +43,6 @@ var RegisteredRoutes = func(app *fiber.App) {
     // Survey Routes
     app.Get("/api/user/survey", middleware.IsUserAuthorized(), controllers.SurveyPage)
     //app.Get("/api/survey/view", middleware.IsUserAuthorized(), controllers.ViewSurvey)
-    //app.Post("/api/survey/submit", middleware.IsUserAuthorized(), controllers.SubmitSurvey)
+    app.Post("/api/user/survey/submit", middleware.IsUserAuthorized(), controllers.SubmitSurvey)
     // app.Get("/api/survey/retake", middleware.IsUserAuthorized(), controllers.RetakeSurvey)
 }

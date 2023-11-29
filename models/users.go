@@ -10,7 +10,7 @@ import (
 )
 
 type User struct {
-	ID         int32     `gorm:"primaryKey" gorm:"autoIncrement" db:"id" json:"id"`
+	ID         int32     `gorm:"primaryKey;autoIncrement" db:"id" json:"id"`
 	GoogleID   string    `db:"google_id" json:"google_id"`
 	Username   string    `db:"username" json:"username"`
 	GivenName  string    `db:"given_name" json:"given_name"`
@@ -33,6 +33,18 @@ func GetUserByID(google_id string) (*User, error) {
 	if result.Error != nil {
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 			return nil, fmt.Errorf("User record with google_id %v not found", google_id)
+		}
+		return nil, result.Error
+	}
+	return &user, nil
+}
+
+func GetUserByEmail(Email string) (*User, error) {
+	var user User
+	result := db.DB.First(&user, "Email = ?", Email)
+	if result.Error != nil {
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			return nil, fmt.Errorf("User record with Email: %v not found", Email)
 		}
 		return nil, result.Error
 	}

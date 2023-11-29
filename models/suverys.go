@@ -10,7 +10,7 @@ import (
 )
 
 type Survey struct {
-	ID          int32     `gorm:"primaryKey" gorm:"autoIncrement" db:"id" json:"id"`
+	ID          int32     `gorm:"primaryKey;autoIncrement" db:"id" json:"id"`
 	Title       string    `db:"title" json:"title"`
 	Created_At  time.Time `db:"timestamp" json:"timestamp"`
 	Description string    `db:"description" json:"description"`

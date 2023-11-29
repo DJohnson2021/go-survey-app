@@ -5,33 +5,33 @@
     <title>survey</title>
     <link rel="stylesheet" href="../static/styles/survey.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
     <div class="heading">
-        <h1 id="head"> sleep survey</h1>
+        <h1 id="head"> Sleep Survey</h1>
     </div>
 
-    <!-- Add the action attribute to the form -->
-    <form action="/api/user/survey/results">
+    <form action="/api/user/survey/submit" method="POST">
         <div id="content1">
-            <label>1. Which option best describes how much you sleep</label> <br><br>
-            <div id="option1">
-                <select>
-                    <option>select number of hours</option>
-                    <option value="5">1</option>
-                    <option value="6">2</option>
-                    <option value="7">3</option>
-                    <option value="8">4</option>
-                </select>
-            </div>
-            <br>
-            <label id="head1">2. Would you let a friend take this survey</label><br><br>
-            <input type="radio" name="radio" class="larger">definitely <br><br>
-            <input type="radio" name="radio" class="larger">maybe <br><br>
-            <input type="radio" name="radio" class="larger">not at all <br><br>
+            <label for="sleep_amount">1. Which option best describes how much you sleep</label> <br><br>
+            <select id="sleep_amount" name="sleep_amount">
+                <option value="">Select number of hours</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+            </select>
+            <br><br>
 
-            <!-- Submit Button -->
+            <fieldset>
+                <legend>2. Would you let a friend take this survey?</legend>
+                <label><input type="radio" name="friend_survey" value="definitely" class="larger">Definitely</label><br>
+                <label><input type="radio" name="friend_survey" value="maybe" class="larger">Maybe</label><br>
+                <label><input type="radio" name="friend_survey" value="not_at_all" class="larger">Not at all</label><br>
+            </fieldset>
+
             <button type="submit">
                 <h3>Submit Survey</h3>
             </button>

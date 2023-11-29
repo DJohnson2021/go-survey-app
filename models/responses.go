@@ -10,10 +10,10 @@ import (
 )
 
 type Response struct {
-	ID            int32     `gorm:"primaryKey" gorm:"autoIncrement" db:"id" json:"id"`
+	ID            int32     `gorm:"primaryKey;autoIncrement" db:"id" json:"id"`
 	Question_id   int32     `db:"question_id" json:"question_id"`
 	User_id       int32     `db:"user_id" json:"user_id"`
-	Response_text string    `db:"response_text" json:"response_text"`
+	Response string    `db:"response" json:"response"`
 	Created_At    time.Time `db:"timestamp" json:"timestamp"`
 }
 
