@@ -72,3 +72,4 @@ func ModifyUser(user *User) error {
 	}
 	return nil
 }
+
